@@ -51,11 +51,12 @@ namespace TSK_AssetDL
             if (!openFileDialog.ShowDialog() == true)
                 return;
 
-            string catalog = File.ReadAllText(openFileDialog.FileName).Split("], \"m_KeyDataString\"")[0];
+            string catalog = File.ReadAllText(openFileDialog.FileName).Split("\"m_KeyDataString\"")[0];
 
-            // current: 1957
+            // current: 2982
             int bundle_id = Int32.Parse(Regex.Match(Regex.Matches(catalog, ",\"[0-9]+#/").Cast<Match>().Select(m => m.Value).ToArray().AsQueryable().Last(), "[0-9]+").Value);
             string[] AssetList = catalog.Split($"\",\"{bundle_id}#/").Skip(1).ToArray();
+            AssetList[^1] = AssetList.Last().Split(".bundle")[0] + ".bundle";
 
             App.TotalCount = AssetList.Length;
 
